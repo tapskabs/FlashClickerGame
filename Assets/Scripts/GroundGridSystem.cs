@@ -1,6 +1,6 @@
 using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
-public class GridSystem : MonoBehaviour
+public class GroundGridSystem : MonoBehaviour
 {
 
     [Header("Grid Settings")]
