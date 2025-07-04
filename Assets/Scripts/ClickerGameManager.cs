@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,21 +13,39 @@ public class ClickerGameManager : MonoBehaviour
     public TMP_Text objectNameText;
     public Image objectSpriteImage;
     public TMP_Text clickCountText;
-
+    public InventoryManager inventoryManager;
     [Header("Furniture List")]
     public FurnitureData[] allFurnitureItems;
-
+    public FurnitureData[] allFurniture;
+    private List<FurnitureData> remainingItems = new List<FurnitureData>();
     private int nextUnlockThreshold = 0;
-
+    
+    private List<FurnitureData> remainingFurniture = new List<FurnitureData>();
     private void Start()
     {
         clickerPanel.SetActive(false);
         startClickerButton.onClick.AddListener(OpenClickerGame);
         clickerButton.onClick.AddListener(OnClickerPressed);
         backButton.onClick.AddListener(CloseClickerGame);
-
-        // Only do this once per scene
+        remainingItems = new List<FurnitureData>(allFurniture);
+        
+        remainingFurniture = new List<FurnitureData>(allFurniture);
         ClickerGameData.Initialize(allFurnitureItems);
+    }
+    public void UnlockRandomFurniture()
+    {
+        if (remainingFurniture.Count == 0)
+        {
+            Debug.Log("All furniture unlocked!");
+            return;
+        }
+
+        int rand = Random.Range(0, remainingFurniture.Count);
+        FurnitureData item = remainingFurniture[rand];
+        remainingFurniture.RemoveAt(rand);
+
+        inventoryManager.UnlockFurniture(item);
+        Debug.Log("Unlocked: " + item.furnitureName);
     }
 
     void OpenClickerGame()
@@ -99,6 +118,8 @@ public class ClickerGameManager : MonoBehaviour
 
         Debug.Log($"Unlocked: {unlocked.furnitureName}");
 
-        // (Next Step) Add to inventory panel here
+       
+        inventoryManager.UnlockFurniture(unlocked);
     }
+
 }
