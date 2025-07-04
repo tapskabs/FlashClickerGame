@@ -13,8 +13,8 @@ public class InventoryManager : MonoBehaviour
     public class FurnitureButton
     {
         public FurnitureData furniture;
-        public GameObject buttonObject;    // The button GameObject in the UI
-        public Image buttonImage;          // The Image component to show sprite
+        public GameObject buttonObject;    
+        public Image buttonImage;          
     }
 
     public List<FurnitureButton> furnitureButtons;
