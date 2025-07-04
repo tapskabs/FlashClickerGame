@@ -1032,9 +1032,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 606929659}
   - {fileID: 1153527652}
   - {fileID: 77460463}
-  - {fileID: 606929659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1167,7 +1167,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1885,10 +1885,9 @@ MonoBehaviour:
   objectNameText: {fileID: 305996662}
   objectSpriteImage: {fileID: 1896874059}
   clickCountText: {fileID: 1508217762}
-  clicksToUnlock: 10
-  furniturePool:
+  allFurnitureItems:
   - {fileID: 11400000, guid: 7ff6cc6cac7f8b149a36f9ac08ae464c, type: 2}
-  - {fileID: 11400000, guid: 7ff6cc6cac7f8b149a36f9ac08ae464c, type: 2}
+  - {fileID: 11400000, guid: 9ebd86252811b4e4590e4b31440b8783, type: 2}
 --- !u!4 &2050704758
 Transform:
   m_ObjectHideFlags: 0

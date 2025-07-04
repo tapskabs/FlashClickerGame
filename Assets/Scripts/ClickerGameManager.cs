@@ -13,14 +13,10 @@ public class ClickerGameManager : MonoBehaviour
     public Image objectSpriteImage;
     public TMP_Text clickCountText;
 
-    [Header("Clicker Settings")]
-    public int clicksToUnlock = 10;
-    private int currentClicks = 0;
-    private bool unlocked = false;
-
     [Header("Furniture List")]
-    public FurnitureData[] furniturePool;
-    private FurnitureData currentFurniture;
+    public FurnitureData[] allFurnitureItems;
+
+    private int nextUnlockThreshold = 0;
 
     private void Start()
     {
@@ -28,13 +24,27 @@ public class ClickerGameManager : MonoBehaviour
         startClickerButton.onClick.AddListener(OpenClickerGame);
         clickerButton.onClick.AddListener(OnClickerPressed);
         backButton.onClick.AddListener(CloseClickerGame);
+
+        // Only do this once per scene
+        ClickerGameData.Initialize(allFurnitureItems);
     }
 
     void OpenClickerGame()
     {
         clickerPanel.SetActive(true);
-        ResetClicker();
-        SelectRandomFurniture();
+        objectNameText.text = "";
+        objectSpriteImage.sprite = null;
+        objectSpriteImage.enabled = false;
+
+        if (ClickerGameData.RemainingFurniture.Count > 0)
+        {
+            GenerateNewThreshold();
+            UpdateClickText();
+        }
+        else
+        {
+            clickCountText.text = "All items unlocked!";
+        }
     }
 
     void CloseClickerGame()
@@ -44,40 +54,51 @@ public class ClickerGameManager : MonoBehaviour
 
     void OnClickerPressed()
     {
-        if (unlocked) return;
+        if (ClickerGameData.RemainingFurniture.Count == 0)
+        {
+            clickCountText.text = "All items unlocked!";
+            return;
+        }
 
-        currentClicks++;
-        clickCountText.text = $"Clicks: {currentClicks}/{clicksToUnlock}";
+        ClickerGameData.TotalClicks++;
+        UpdateClickText();
 
-        if (currentClicks >= clicksToUnlock)
+        if (ClickerGameData.TotalClicks >= nextUnlockThreshold)
         {
             UnlockFurniture();
+            if (ClickerGameData.RemainingFurniture.Count > 0)
+                GenerateNewThreshold();
+            else
+                clickCountText.text = "All items unlocked!";
         }
     }
 
-    void ResetClicker()
+    void GenerateNewThreshold()
     {
-        currentClicks = 0;
-        unlocked = false;
-        clickCountText.text = $"Clicks: {currentClicks}";
-        objectNameText.text = "";
-        objectSpriteImage.sprite = null;
-        objectSpriteImage.enabled = false; 
+        nextUnlockThreshold = ClickerGameData.TotalClicks + Random.Range(5, 16);
     }
 
-    void SelectRandomFurniture()
+    void UpdateClickText()
     {
-        currentFurniture = furniturePool[Random.Range(0, furniturePool.Length)];
+        clickCountText.text = $"Clicks: {ClickerGameData.TotalClicks}";
     }
 
     void UnlockFurniture()
     {
-        unlocked = true;
-        objectNameText.text = currentFurniture.furnitureName;
-        objectSpriteImage.sprite = currentFurniture.furnitureSprite;
-        objectSpriteImage.enabled = true; 
+        var pool = ClickerGameData.RemainingFurniture;
+        if (pool.Count == 0) return;
 
-        
-        Debug.Log($"Unlocked: {currentFurniture.furnitureName}");
+        int rand = Random.Range(0, pool.Count);
+        var unlocked = pool[rand];
+
+        ClickerGameData.UnlockItem(unlocked);
+
+        objectNameText.text = unlocked.furnitureName;
+        objectSpriteImage.sprite = unlocked.furnitureSprite;
+        objectSpriteImage.enabled = true;
+
+        Debug.Log($"Unlocked: {unlocked.furnitureName}");
+
+        // (Next Step) Add to inventory panel here
     }
 }
